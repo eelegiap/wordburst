@@ -1,0 +1,133 @@
+<!-- http://bl.ocks.org/jdittmar/7800481 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta charset="utf-8">
+
+<head>
+    <title>Text Transition</title>
+    <style type="text/css">
+        text {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 24px;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+
+</head>
+
+<body>
+    <div style='text-align: center; padding-top: 100px'>
+        <form name="myform" onSubmit="return eventhandler()">
+            <input type="text" id="myWord" placeholder="Input a Russian word&hellip;">
+            <input name="Submit" type="submit" value="Enter">
+        </form>
+    </div>
+    <div id='svg' style='text-align: center'></div>
+</body>
+
+<script type="text/javascript">
+    function eventhandler() {
+        var myWord = document.getElementById("myWord").value;
+        d3.select("#svg").selectAll("*").remove();
+        animateWord(myWord);
+        return false;
+    }
+    function animateWord(myWord) {
+        d3.json('lemma_data_1-10.json', function (error, data) {
+            // initialize the svg canvas
+            var screenwidth = screen.width;
+
+            var svg = d3.select("#svg").append("svg")
+                .attr("width", screenwidth)
+                .attr("height", 500)
+                .append("g")
+                .attr("transform", "translate(" + (screenwidth / 2) + ",50)")
+
+            var lemmaDict = getWordParts(myWord);
+
+            if (lemmaDict == 'NotFound') {
+                var text = svg
+                    .append('text')
+                    .text('Not found in database.')
+                    .style("text-anchor", "middle");
+                return false;
+            }
+
+            var text = svg
+                .append('text')
+                .text(myWord)
+                .style("text-anchor", "middle");
+
+            var prefix = svg.append('text')
+                .style("text-anchor", "middle")
+                .text(lemmaDict['prefixes'])
+                .attr('fill','tomato')
+                .attr('display', 'none');
+            var root = svg.append('text')
+                .style("text-anchor", "middle")
+                .text(lemmaDict['roots'])
+                .attr('fill','blue')
+                .attr('display', 'none');
+            var suffix = svg.append('text')
+                .style("text-anchor", "middle")
+                .text(lemmaDict['suffixes'])
+                .attr('fill','#ffdb58')
+                .attr('display', 'none');
+
+            text
+                .on('mouseover', function () {
+                    text.transition().duration(100).attr('fill', 'gray');
+                })
+                .on('mouseout', function () {
+                    text.transition().duration(100).attr('fill', 'black');
+                })
+                .on("click", function () {
+                    if (prefix.style('display') == 'none') {
+                        text.transition().duration(100).attr('fill', 'gray');
+                        prefix.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(-400,200)')
+                            .attr('display', 'block');
+                        root.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(0,200)')
+                            .attr('display', 'block');
+                        suffix.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(400,200)')
+                            .attr('display', 'block');
+                    } else {
+                        text.transition().duration(100).attr('fill', 'black');
+                        prefix.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(0,25)')
+                            .transition()
+                            .duration(1000)
+                            .attr('display', 'none');
+                        root.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(0,25)')
+                            .transition()
+                            .duration(1000)
+                            .attr('display', 'none');
+                        suffix.transition()
+                            .duration(500)
+                            .attr('transform', 'translate(0,25)')
+                            .transition()
+                            .duration(1000)
+                            .attr('display', 'none');
+                    }
+                });
+            function getWordParts(myWord) {
+                for (lemmaDict of data) {
+                    if (myWord == lemmaDict['lemma']) {
+                        console.log('lemmadict', lemmaDict);
+                        return lemmaDict;
+                    }
+                };
+                return 'NotFound';
+            }
+        });
+    }
+</script>
+
+</html>
