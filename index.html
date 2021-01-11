@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <p>Enter a word to see its prefix/root/suffix breakdown based on the database. Click the word once it appears to break it down.</p>
     <div style='text-align: center; padding-top: 100px'>
         <form name="myform" onSubmit="return eventhandler()">
             <input type="text" id="myWord" placeholder="Input a Russian word&hellip;">
@@ -25,6 +26,8 @@
 </body>
 
 <script type="text/javascript">
+    document.getElementById('myWord').value="название"
+
     function eventhandler() {
         var myWord = document.getElementById("myWord").value;
         d3.select("#svg").selectAll("*").remove();
