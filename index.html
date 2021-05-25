@@ -5,10 +5,12 @@
 <head>
     <title>Word Burst</title>
     <style type="text/css">
-        input, p {
+        input,
+        p {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 14px;
         }
+
         text {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 24px;
@@ -20,7 +22,8 @@
 
 <body>
     <h3>Word Burst</h3>
-    <p>Enter a word to see its prefix/root/suffix breakdown based on the database. Click the word once it appears to break it down.</p>
+    <p>Enter a word to see its prefix/root/suffix breakdown based on the database. Click the word once it appears to
+        break it down.</p>
     <div style='text-align: center; padding-top: 100px'>
         <form name="myform" onSubmit="return eventhandler()">
             <input type="text" id="myWord" placeholder="Input a Russian word&hellip;">
@@ -31,7 +34,7 @@
 </body>
 
 <script type="text/javascript">
-    document.getElementById('myWord').value="название"
+    document.getElementById('myWord').value = "название"
 
     function eventhandler() {
         var myWord = document.getElementById("myWord").value;
@@ -68,17 +71,17 @@
             var prefix = svg.append('text')
                 .style("text-anchor", "middle")
                 .text(lemmaDict['prefixes'])
-                .attr('fill','tomato')
+                .attr('fill', 'tomato')
                 .attr('display', 'none');
             var root = svg.append('text')
                 .style("text-anchor", "middle")
                 .text(lemmaDict['roots'])
-                .attr('fill','blue')
+                .attr('fill', 'blue')
                 .attr('display', 'none');
             var suffix = svg.append('text')
                 .style("text-anchor", "middle")
                 .text(lemmaDict['suffixes'])
-                .attr('fill','#ffdb58')
+                .attr('fill', '#ffdb58')
                 .attr('display', 'none');
 
             text
@@ -89,42 +92,43 @@
                     text.transition().duration(100).attr('fill', 'black');
                 })
                 .on("click", function () {
-                    if (prefix.style('display') == 'none') {
-                        text.transition().duration(100).attr('fill', 'gray');
-                        prefix.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(-400,200)')
-                            .attr('display', 'block');
-                        root.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(0,200)')
-                            .attr('display', 'block');
-                        suffix.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(400,200)')
-                            .attr('display', 'block');
-                    } else {
-                        text.transition().duration(100).attr('fill', 'black');
-                        prefix.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(0,25)')
-                            .transition()
-                            .duration(1000)
-                            .attr('display', 'none');
-                        root.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(0,25)')
-                            .transition()
-                            .duration(1000)
-                            .attr('display', 'none');
-                        suffix.transition()
-                            .duration(500)
-                            .attr('transform', 'translate(0,25)')
-                            .transition()
-                            .duration(1000)
-                            .attr('display', 'none');
-                    }
+
                 });
+            if (prefix.style('display') == 'none') {
+                text.transition().duration(100).attr('fill', 'gray');
+                prefix.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(-400,200)')
+                    .attr('display', 'block');
+                root.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(0,200)')
+                    .attr('display', 'block');
+                suffix.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(400,200)')
+                    .attr('display', 'block');
+            } else {
+                text.transition().duration(100).attr('fill', 'black');
+                prefix.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(0,25)')
+                    .transition()
+                    .duration(1000)
+                    .attr('display', 'none');
+                root.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(0,25)')
+                    .transition()
+                    .duration(1000)
+                    .attr('display', 'none');
+                suffix.transition()
+                    .duration(500)
+                    .attr('transform', 'translate(0,25)')
+                    .transition()
+                    .duration(1000)
+                    .attr('display', 'none');
+            }
             function getWordParts(myWord) {
                 for (lemmaDict of data) {
                     if (myWord == lemmaDict['lemma']) {
